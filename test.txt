@@ -1,0 +1,4 @@
+echo "test" > test.txt
+git add .
+git commit -m "Tilføj en testfil"
+git push origin main
