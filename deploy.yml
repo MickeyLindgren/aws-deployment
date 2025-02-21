@@ -1,0 +1,18 @@
+- name: Deploy Docker container
+  hosts: all
+  become: yes
+  tasks:
+    - name: Stop eksisterende container
+      shell: docker stop myapp-container || true
+
+    - name: Fjern eksisterende container
+      shell: docker rm myapp-container || true
+
+    - name: Rens op i gamle Docker-images
+      shell: docker image prune -f
+
+    - name: Pull det nyeste Docker-image
+      shell: docker pull mick1746/myapp:latest
+
+    - name: Start containeren
+      shell: docker run -d -p 8081:80 --name myapp-container mick1746/myapp:latest
