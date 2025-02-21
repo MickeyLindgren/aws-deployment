@@ -1,6 +1,6 @@
 - name: Deploy Docker container
   hosts: localhost
-  become: yes
+  become: yes  # Brug sudo
   tasks:
     - name: Stop eksisterende container
       shell: docker stop myapp-container || true
