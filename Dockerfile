@@ -1,11 +1,14 @@
-# Brug en officiel Nginx base image
-FROM nginx:latest
+# Brug Ubuntu som base image
+FROM ubuntu:latest
 
-# Kopiér en test-side til Nginx-serveren
-COPY index.html /usr/share/nginx/html/index.html
+# Installer Apache
+RUN apt update && apt install -y apache2 && apt clean
 
-# Eksponér port 80
+# Kopiér index.html fra repo til Apache's webroot
+COPY index.html /var/www/html/index.html
+
+# Åbn port 80 for HTTP
 EXPOSE 80
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start Apache i forgrunden
+CMD ["apachectl", "-D", "FOREGROUND"]
