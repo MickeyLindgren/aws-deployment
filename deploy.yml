@@ -1,18 +1,14 @@
-- name: Deploy Docker container
-  hosts: localhost
-  become: yes  # Brug sudo
+- hosts: slave
+  become: yes
   tasks:
-    - name: Stop eksisterende container
-      shell: docker stop myapp-container || true
+    - name: Log ind i Docker Hub
+      shell: echo "{{ docker_password }}" | docker login -u "{{ docker_user }}" --password-stdin
 
-    - name: Fjern eksisterende container
-      shell: docker rm myapp-container || true
+    - name: Stop og fjern eksisterende container
+      shell: docker rm -f apache-container || true
 
-    - name: Rens op i gamle Docker-images
-      shell: docker image prune -f
-
-    - name: Pull det nyeste Docker-image
+    - name: Pull nyeste Apache image
       shell: docker pull mick1746/myapp:latest
 
-    - name: Start containeren
-      shell: docker run -d -p 8081:80 --name myapp-container mick1746/myapp:latest
+    - name: Start Apache container
+      shell: docker run -d --name apache-container -p 80:80 mick1746/myapp:latest
